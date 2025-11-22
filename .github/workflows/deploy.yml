@@ -1,0 +1,35 @@
+name: Deploy to GAS
+
+on:
+  push:
+    branches:
+      - main  # mainブランチにプッシュされた時だけ動く
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      # 1. リポジトリのコードをチェックアウト
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Node.jsをセットアップ
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 3. claspをインストール
+      - name: Install Clasp
+        run: npm install -g @google/clasp
+
+      # 4. Secretsから認証ファイルを復元する（ここが肝！）
+      - name: Create ~/.clasprc.json
+        run: |
+          echo '${{ secrets.CLASPRC_JSON }}' > ~/.clasprc.json
+
+      # 5. GASへプッシュ（デプロイ）
+      - name: Push to GAS
+        run: clasp push -f

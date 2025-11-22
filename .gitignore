@@ -1,0 +1,9 @@
+# Node modules
+node_modules/
+
+# Clasp settings (セキュリティのため絶対にGitに上げない)
+.clasprc.json
+
+# OS generated files
+.DS_Store
+Thumbs.db
